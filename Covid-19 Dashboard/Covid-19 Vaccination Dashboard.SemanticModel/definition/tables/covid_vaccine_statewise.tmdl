@@ -1,0 +1,145 @@
+table covid_vaccine_statewise
+	lineageTag: d21cc8f3-aa1a-4c62-afc8-f9bae27f4b64
+
+	column 'Updated On'
+		dataType: string
+		lineageTag: 688c7d8b-8701-435f-a4b1-05dcacc34db1
+		summarizeBy: none
+		sourceColumn: Updated On
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 909bf039-6613-46aa-a288-a980e4ccfecb
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Individuals Registered'
+		dataType: int64
+		formatString: 0
+		lineageTag: be3ee9c5-acf8-475e-8a1d-3a7dc0f093ca
+		summarizeBy: sum
+		sourceColumn: Total Individuals Registered
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Sessions Conducted'
+		dataType: int64
+		formatString: 0
+		lineageTag: d607aac5-02a0-43c1-abde-38cea4ffb213
+		summarizeBy: sum
+		sourceColumn: Total Sessions Conducted
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Sites '
+		dataType: int64
+		formatString: 0
+		lineageTag: e087e78f-27de-43f4-bb46-131b45560c8c
+		summarizeBy: sum
+		sourceColumn: "Total Sites "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'First Dose Administered'
+		dataType: int64
+		formatString: 0
+		lineageTag: c15a828f-d762-4dc2-b0a2-f54af48ee576
+		summarizeBy: sum
+		sourceColumn: First Dose Administered
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Second Dose Administered'
+		dataType: int64
+		formatString: 0
+		lineageTag: 67f97c6e-1062-41fa-b8ec-2a84ab7f26af
+		summarizeBy: sum
+		sourceColumn: Second Dose Administered
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Male(Individuals Vaccinated)'
+		dataType: int64
+		formatString: 0
+		lineageTag: 925e7846-3784-42e1-a06c-9e425211a390
+		summarizeBy: sum
+		sourceColumn: Male(Individuals Vaccinated)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Female(Individuals Vaccinated)'
+		dataType: int64
+		formatString: 0
+		lineageTag: e35acd10-d098-4208-a833-7f42571a5e41
+		summarizeBy: sum
+		sourceColumn: Female(Individuals Vaccinated)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Transgender(Individuals Vaccinated)'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6bce87b9-2ea2-4115-bc42-70bd9dc6a58e
+		summarizeBy: sum
+		sourceColumn: Transgender(Individuals Vaccinated)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Covaxin Administered'
+		dataType: int64
+		formatString: 0
+		lineageTag: dac97496-a713-40a9-af5f-151ebd651fe5
+		summarizeBy: sum
+		sourceColumn: Total Covaxin Administered
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total CoviShield Administered'
+		dataType: int64
+		formatString: 0
+		lineageTag: 25ed6576-464a-4cf7-9dce-51fa7372b294
+		summarizeBy: sum
+		sourceColumn: Total CoviShield Administered
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Individuals Vaccinated'
+		dataType: int64
+		formatString: 0
+		lineageTag: be67a98d-860c-4f9c-a725-8b153c315ee9
+		summarizeBy: sum
+		sourceColumn: Total Individuals Vaccinated
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Doses Administered'
+		dataType: int64
+		formatString: 0
+		lineageTag: 88f2015d-8282-4048-b7cd-43370e9e2c2a
+		summarizeBy: sum
+		sourceColumn: Total Doses Administered
+
+		annotation SummarizationSetBy = Automatic
+
+	partition covid_vaccine_statewise-e91d44ac-9101-4f4a-895c-864e5d3ce93f = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Asus\Downloads\covid_vaccine_statewise.csv"),[Delimiter=",", Columns=17, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Updated On", type text}, {"State", type text}, {"Total Individuals Registered", Int64.Type}, {"Total Sessions Conducted", Int64.Type}, {"Total Sites ", Int64.Type}, {"First Dose Administered", Int64.Type}, {"Second Dose Administered", Int64.Type}, {"Male(Individuals Vaccinated)", Int64.Type}, {"Female(Individuals Vaccinated)", Int64.Type}, {"Transgender(Individuals Vaccinated)", Int64.Type}, {"Total Covaxin Administered", Int64.Type}, {"Total CoviShield Administered", Int64.Type}, {"Total Individuals Vaccinated", Int64.Type}, {"Total Doses Administered", Int64.Type}, {"Unnamed: 14", type text}, {"Unnamed: 15", type text}, {"Unnamed: 16", type text}}),
+				    #"Sorted Rows" = Table.Sort(#"Changed Type",{{"Total Individuals Registered", Order.Ascending}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Sorted Rows", {"Total Individuals Registered"}),
+				    #"Sorted Rows1" = Table.Sort(#"Removed Duplicates",{{"Total Sessions Conducted", Order.Ascending}, {"Total Individuals Registered", Order.Ascending}, {"First Dose Administered", Order.Ascending}, {"Second Dose Administered", Order.Ascending}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Sorted Rows1",{"Unnamed: 14", "Unnamed: 15", "Unnamed: 16"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
